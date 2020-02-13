@@ -12,6 +12,7 @@ class ClientComponent extends Component {
 
         this.state = {
             id : this.props.match.params.id,
+            clientName: '',
             description : '',
             targetDate : moment(new Date()).format('YYYY-MM-DD')
         }
@@ -24,6 +25,7 @@ class ClientComponent extends Component {
         let username = AuthenticationService.getLoggedInUserName()
         ClientDataService.retrieveClient(username, this.state.id)
             .then(response => this.setState({
+                clientName: response.data.clientName,
                 description: response.data.description,
                 targetDate: moment(response.data.targetDate).format('YYYY-MM-DD')
             }))
@@ -31,6 +33,10 @@ class ClientComponent extends Component {
 
     validate(values) {
         let errors = {}
+        if(!values.clientName) {
+            errors.clientName = 'Enter a Name'
+        }
+
         if(!values.description) {
             errors.description = 'Enter a Description'
         } else if(values.description.length<5) {
@@ -47,11 +53,18 @@ class ClientComponent extends Component {
     }
 
     onSubmit(values) {
+        let username = AuthenticationService.getLoggedInUserName()
+        ClientDataService.updateClient(username, this.state.id, {
+            id: this.state.id,
+            clientName: values.clientName,
+            description: values.description,
+            targetDate: values.targetDate
+        }).then(() => this.props.history.push('/listclients'))
         console.log(values)
     }
 
     render() {
-        let {description, targetDate} = this.state
+        let {clientName, description, targetDate} = this.state
         //let targetDate = this.state.targetDate
 
         return (
@@ -59,7 +72,7 @@ class ClientComponent extends Component {
                 <h1>Client</h1>
                 <div className="container">
                     <Formik
-                        initialValues={{description, targetDate}}
+                        initialValues={{clientName, description, targetDate}}
                         onSubmit={this.onSubmit}
                         validateOnChange={false}
                         validateOnBlur={false}
@@ -69,10 +82,16 @@ class ClientComponent extends Component {
                         {
                             (props) => (
                                 <Form>
+                                    <ErrorMessage name="clientName" component="div" 
+                                            className="alert alert-warning"/>
                                     <ErrorMessage name="description" component="div" 
                                             className="alert alert-warning"/>
                                     <ErrorMessage name="targetDate" component="div" 
                                             className="alert alert-warning"/>
+                                    <fieldset className="form-group">
+                                        <label>Client Name</label>
+                                        <Field className="form-control" type="text" name="clientName"/>
+                                    </fieldset>
                                     <fieldset className="form-group">
                                         <label>Description</label>
                                         <Field className="form-control" type="text" name="description"/>

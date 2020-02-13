@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import ClientDataService from '../../api/mortgageApp/ClientDataService.js'
 import AuthenticationService from './AuthenticationService.js'
-
+import moment from 'moment'
 
 
 class ListClients extends Component {
@@ -75,7 +75,7 @@ class ListClients extends Component {
                     <thead>
                         <tr>
                             <th>Id</th>
-                            <th>Name</th>
+                            <th>Client Name</th>
                             <th>Description</th>
                             <th>Is Completed</th>
                             <th>Target Date</th>
@@ -89,10 +89,10 @@ class ListClients extends Component {
                                 client =>
                                     <tr key={client.id}>
                                         <td>{client.id}</td>
-                                        <td>{client.username}</td>
+                                        <td>{client.clientName}</td>
                                         <td>{client.description}</td>
                                         <td>{client.done.toString()}</td>
-                                        <td>{client.targetDate.toString()}</td>
+                                        <td>{moment(client.targetDate).format('YYYY-MM-DD')}</td>
                                         <td><button className="btn btn-success" onClick={() => this.updateClientClicked(client.id)}>Update</button></td>
                                         <td><button className="btn btn-warning" onClick={() => this.deleteClientClicked(client.id)}>Delete</button></td>
                                     </tr>

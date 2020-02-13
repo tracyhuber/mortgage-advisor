@@ -15,6 +15,11 @@ class ClientDataService {
 
     }
 
+    updateClient(name, id, client) {
+        return axios.put(`http://localhost:8080/users/${name}/clients/${id}`, client);
+
+    }
+
 }
 
 export default new ClientDataService() 
