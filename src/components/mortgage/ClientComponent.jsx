@@ -22,7 +22,12 @@ class ClientComponent extends Component {
     }
 
     componentDidMount() {
+        if(this.state.id===-1) {
+            return 
+        }
+        
         let username = AuthenticationService.getLoggedInUserName()
+        
         ClientDataService.retrieveClient(username, this.state.id)
             .then(response => this.setState({
                 clientName: response.data.clientName,
@@ -54,14 +59,24 @@ class ClientComponent extends Component {
 
     onSubmit(values) {
         let username = AuthenticationService.getLoggedInUserName()
-        ClientDataService.updateClient(username, this.state.id, {
+        
+        let client = {
             id: this.state.id,
             clientName: values.clientName,
             description: values.description,
             targetDate: values.targetDate
-        }).then(() => this.props.history.push('/listclients'))
+        }
+
+        if (this.state.id === -1) {
+            ClientDataService.createClient(username, client)
+                .then(() => this.props.history.push('/listclients'))
+        } else {
+            ClientDataService.updateClient(username, this.state.id, client)
+                .then(() => this.props.history.push('/listclients'))
+        }
         console.log(values)
     }
+    
 
     render() {
         let {clientName, description, targetDate} = this.state

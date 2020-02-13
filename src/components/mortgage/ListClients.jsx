@@ -18,6 +18,7 @@ class ListClients extends Component {
         }
         this.updateClientClicked = this.updateClientClicked.bind(this)
         this.deleteClientClicked = this.deleteClientClicked.bind(this)
+        this.addClientClicked = this.addClientClicked.bind(this)
         this.refreshClients = this.refreshClients.bind(this)
     }
 
@@ -48,6 +49,10 @@ class ListClients extends Component {
                 }
         )
         //console.log(id + " " + username);
+    }
+
+    addClientClicked(id){
+        this.props.history.push(`/clients/-1`)
     }
 
     updateClientClicked(id){
@@ -100,6 +105,9 @@ class ListClients extends Component {
                         }
                     </tbody>
                 </table>
+                <div className="row">
+                    <button className="btn btn-success" onClick={this.addClientClicked}>Add</button>
+                </div>
                 </div>
             </div>
         )

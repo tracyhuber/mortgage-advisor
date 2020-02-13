@@ -19,6 +19,11 @@ class ClientDataService {
         return axios.put(`http://localhost:8080/users/${name}/clients/${id}`, client);
 
     }
+    createClient(name, client) {
+        return axios.post(`http://localhost:8080/users/${name}/clients/`, client);
+
+    }
+
 
 }
 
