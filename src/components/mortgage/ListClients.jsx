@@ -29,7 +29,7 @@ class ListClients extends Component {
     }
 
     refreshClients() {
-        let username = AuthenticationService.getLoggedInUserName
+        let username = AuthenticationService.getLoggedInUserName()
         ClientDataService.retrieveAllClients(username)
             .then(
                 response => {
